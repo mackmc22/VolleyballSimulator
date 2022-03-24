@@ -8,14 +8,20 @@
 #
 import random
 
+sausage = Player('sausage', .1)
+bratwurst = Player('bratwurst', .2)
+hamburger = Player('hamburger', .3)
+cheeseburger = Player('cheeseburger', .4)
+
 
 class Team():
     def __init__(self, team_name):
         self.team_name = team_name
 
 
-team_a = Team('hotdog')
-team_b = Team('burger')
+team_a = Team('hotdog', [sausage, bratwurst])
+team_b = Team('burger', [hamburger, cheeseburger])
+
 
 
 class VolleyballGame():
@@ -62,5 +68,3 @@ class VolleyballGame():
 
 game = VolleyballGame(team_a, team_b)
 game.play()
-
-
