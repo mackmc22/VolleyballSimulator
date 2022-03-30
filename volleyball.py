@@ -14,8 +14,6 @@ class Player:
         self.name = name
         self.rating = rating
 
-    def get_player_rating(self):
-        return self.rating
 
 sausage = Player('sausage', .1)
 bratwurst = Player('bratwurst', .2)
@@ -24,96 +22,69 @@ cheeseburger = Player('cheeseburger', .4)
 
 
 class Team:
-    def __init__(self, team_name, players):
-        self.team_name = team_name
+    def __init__(self, name, players):
+        self.name = name
         self.players = players
-
-    def get_players(self):
-        return self.players
+        self.score = 0
 
 
 team_a = Team('hotdog', [sausage, bratwurst])
 team_b = Team('burger', [hamburger, cheeseburger])
 
 
-
 class VolleyballGame:
-
     def __init__(self, team_a, team_b):
         self.team_a = team_a
         self.team_b = team_b
-        self.service_order = []
-
-    def get_service_order(self):
-        # determine first serving player and subsequent service order
-        for index in range(len(self.team_a)):
-            self.service_order.append(self.team_a.players[index])
-            self.service_order.append(self.team_b.players[index])
 
     def play(self):
-        a_score = 0
-        b_score = 0
-        server_index = 0
         winner = None
 
-        self.get_service_order()
-
-        # serving team serves until the other team gets a point
-
-        # determine first server
-        # determine index at which the serving player sits in service order
-        server_index = random.choice(range(len(self.service_order)))
-
-
-        # need to get the rating of the serving player, player.rating
-        player_rating = 0
-
-
-        '''
-        for player in team_a.get_players():
-            print(player.get_player_rating())
-            '''
-
-        for a_player in self.service_order:
-            team = None
-
-            if a_player.name in self.team_a.players:
-                team = self.team_a
-
-            else:
-                team = self.team_b
+        playing_team = random.choice([self.team_a, self.team_b])
 
         while True:
-
-            if random.random() < player_rating:
-                # heads - team a gets ball
-                a_score += 1
-
+            # The volley logic
+            # Pick the player (find the rating)
+            playing_player = random.choice(playing_team.players)
+            if playing_player.rating > random.random():
+                # the player just scored for their team
+                playing_team.score += 1
             else:
-                # tails - team b gets ball
-                b_score += 1
+                # the player just bungled it for their team
+                # do 2 things:
+                # 1: give the other team a point
+                # 2: need to swap the playing_team
+                opponent = None
+                if playing_team.name == self.team_a.name:
+                    opponent = self.team_b
+                else:
+                    opponent = self.team_a
 
-            if a_score == 15 or b_score == 15:
-                if abs(a_score - b_score) >= 2:
-                    if a_score > b_score:
+                opponent.score += 1
+                playing_team = opponent
+
+            # The scoring logic?
+            # LEAVE THIS ALONE
+            if self.team_a.score == 15 or self.team_b.score == 15:
+                if abs(self.team_a.score - self.team_b.score) >= 2:
+                    if self.team_a.score > self.team_b.score:
                         winner = self.team_a
-                        print(a_score, 'vs.', b_score)
+                        print(self.team_a.score, 'vs.', self.team_b.score)
                     else:
                         winner = self.team_b
-                        print(b_score, 'vs.', a_score)
+                        print(self.team_b.score, 'vs.', self.team_a.score)
                     break
-            elif a_score == 21 or b_score == 21:
-                if a_score > b_score:
+            elif self.team_a.score == 21 or self.team_b.score == 21:
+                if self.team_a.score > self.team_b.score:
                     winner = self.team_a
-                    print(a_score, 'vs.', b_score)
+                    print(self.team_a.score, 'vs.', self.team_b.score)
                 else:
                     winner = self.team_b
-                    print(b_score, 'vs.', a_score)
+                    print(self.team_b.score, 'vs.', self.team_a.score)
                 break
 
-        print(winner.team_name)
+        print(winner.name)
 
 
-#game = VolleyballGame(team_a, team_b)
-#game.play()
-
+game = VolleyballGame(team_a, team_b)
+game.play()
